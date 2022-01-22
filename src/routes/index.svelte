@@ -1,49 +1,77 @@
 <script>
+	import { browser } from '$app/env';
+	import { setWord, Word } from '../stores/gamestore';
+
+	if (browser) {
+		setWord();
+	}
+
 	import CharachterInput from '../components/CharachterInput.svelte';
-	let word = 'نیران';
-	let wordChars = word.split('').map((char, id) => ({
+
+	let wordChars = $Word.value.split('').map((char, id) => ({
 		id,
 		char
 	}));
-
+	let guessIndex = 0;
 	let finsihed = false;
-
 	let hasGuessedWrong = false;
 
-	const allowedGusses = Array(5)
+	let allowedGusses = Array($Word.guessCount)
 		.fill('')
 		.map((_) => ({
 			guess: '',
 			segments: []
 		}));
 
-	let guessIndex = 0;
+	$: {
+		wordChars = $Word.value.split('').map((char, id) => ({
+			id,
+			char
+		}));
+		guessIndex = 0;
+		finsihed = false;
+		hasGuessedWrong = false;
 
-	const handleKeydown = ({ key }) => {
+		allowedGusses = Array($Word.guessCount)
+			.fill('')
+			.map((_) => ({
+				guess: '',
+				segments: []
+			}));
+	}
+
+	const handleKeydown = async ({ key }) => {
 		let currentGuess = allowedGusses[guessIndex];
-		const isGuessFilled = currentGuess.guess.length === word.length;
+		const isGuessFilled = currentGuess.guess.length === $Word.value.length;
 
 		if (key === 'Enter') {
-			const hasMoreGuess = guessIndex < allowedGusses.length - 1;
+			if (isGuessFilled) {
+				const hasMoreGuess = guessIndex < allowedGusses.length - 1;
+				const response = await fetch(`/api/word/${currentGuess.guess}`);
+				const data = await response.json();
 
-			if (isGuessFilled && word === currentGuess.guess) {
-				finsihed = true;
-			} else if (isGuessFilled && hasMoreGuess) {
-				hasGuessedWrong = true;
+				if (data?.count) {
+					if ($Word.value === currentGuess.guess || !hasMoreGuess) {
+						finsihed = true;
+					} else if (hasMoreGuess) {
+						hasGuessedWrong = true;
 
-				setTimeout(() => {
-					hasGuessedWrong = false;
-				}, 250);
+						setTimeout(() => {
+							hasGuessedWrong = false;
+							guessIndex += 1;
+							currentGuess = {
+								guess: '',
+								segments: []
+							};
+						}, 250);
+					}
+				} else {
+					hasGuessedWrong = true;
 
-				guessIndex += 1;
-				currentGuess = {
-					guess: '',
-					segments: []
-				};
-			}
-
-			if (isGuessFilled && !hasMoreGuess) {
-				finsihed = true;
+					setTimeout(() => {
+						hasGuessedWrong = false;
+					}, 250);
+				}
 			}
 		}
 
@@ -70,6 +98,7 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <svelte:head>
+	<title>Kalamchi | کلمچی</title>
 	<link
 		href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css"
 		rel="stylesheet"
@@ -78,16 +107,15 @@
 </svelte:head>
 
 <main>
-	<div class="board" style="grid-template-columns: repeat({word.length}, 60px);">
+	<div class="board" style="grid-template-columns: repeat({$Word.value.length}, 60px);">
 		{#each allowedGusses as ag, index}
-			<div class="row" class:shake={index === guessIndex - 1 && hasGuessedWrong}>
+			<div class="row" class:shake={index === guessIndex && hasGuessedWrong}>
 				{#each wordChars as w, charIndex (w.id)}
 					<CharachterInput
 						bind:char={ag.segments[w.id]}
 						index={charIndex}
 						guess={ag.guess}
-						{word}
-						shouldBe={word[charIndex]}
+						shouldBe={$Word.value[charIndex]}
 						disabled={index < guessIndex || finsihed}
 					/>
 				{/each}
@@ -131,7 +159,13 @@
 		0% {
 			transform: translateX(-4px);
 		}
+		30% {
+			transform: translateX(4px);
+		}
 		50% {
+			transform: translateX(-4px);
+		}
+		70% {
 			transform: translateX(4px);
 		}
 		100% {

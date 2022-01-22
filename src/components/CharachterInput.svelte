@@ -1,8 +1,10 @@
 <script>
+	import { Word } from '../stores/gamestore';
+
 	export let char = '';
 	export let disabled = false;
 	export let index = 0;
-	export let word = '';
+	let word = $Word.value;
 	export let guess = '';
 	export let shouldBe = '';
 
@@ -15,7 +17,12 @@
 		.join('');
 
 	$: correct = disabled && char && word.includes(char) && shouldBe === char;
-	$: contains = disabled && char && shouldBe !== char && remainings.includes(char);
+	$: contains =
+		disabled &&
+		char &&
+		shouldBe !== char &&
+		remainings.includes(char) &&
+		guess.indexOf(char) === index;
 </script>
 
 <div class:d={char} class:correct class:contains class:disabled class="input">
