@@ -66,10 +66,6 @@
 		background: rgb(91, 131, 31);
 	}
 
-	.wrong {
-		background: red;
-	}
-
 	.contains {
 		background: rgb(165, 165, 16);
 	}

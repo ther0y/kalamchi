@@ -139,12 +139,6 @@
 		justify-content: center;
 	}
 
-	.board {
-		/* display: grid;
-      margin: 0 auto;
-      grid-gap: 8px; */
-	}
-
 	.row {
 		display: flex;
 		gap: 8px;
