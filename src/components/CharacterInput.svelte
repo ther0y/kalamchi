@@ -1,13 +1,15 @@
 <script>
-	import { Word } from '../stores/gamestore';
+	import {GameStore} from '../stores/gamestore';
 
 	export let char = '';
 	export let disabled = false;
 	export let index = 0;
-	let word = $Word.value;
 	export let guess = '';
 	export let shouldBe = '';
+	export let sample = false;
+	export let state = '';
 
+	$: word = $GameStore.word.value;
 	$: remainings = word
 		.split('')
 		.map((w, index) => {
@@ -16,8 +18,8 @@
 		})
 		.join('');
 
-	$: correct = disabled && char && word.includes(char) && shouldBe === char;
-	$: contains =
+	$: correct = (sample && state === 'correct') || disabled && char && word.includes(char) && shouldBe === char;
+	$: contains = (sample && state === 'contains') ||
 		disabled &&
 		char &&
 		shouldBe !== char &&
@@ -25,7 +27,7 @@
 		guess.indexOf(char) === index;
 </script>
 
-<div class:d={char} class:correct class:contains class:disabled class="input">
+<div class:sample class:bang={char} class:correct class:contains class:disabled class="input">
 	{char || ''}
 </div>
 
@@ -39,19 +41,31 @@
 		width: 60px;
 		height: 60px;
 		margin: 0;
-		padding: 0;
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
 		font-size: 28px;
 		font-weight: bold;
 		box-sizing: border-box;
-		padding-bottom: 0px;
+		padding: 0;
 		color: white;
 		user-select: none;
 	}
 
-	.d {
+	@media screen and (max-width: 480px) {
+		.input {
+			width: 45px;
+			height: 45px;
+		}
+	}
+
+	.sample {
+		width: 32px !important;
+		height: 32px !important;
+		font-size: 18px;
+	}
+
+	.bang {
 		animation: bang 0.25s;
 		border: 2px solid white;
 		transition: all 0.25s;
@@ -63,11 +77,11 @@
 	}
 
 	.correct {
-		background: rgb(91, 131, 31);
+		background: #538d4e;
 	}
 
 	.contains {
-		background: rgb(165, 165, 16);
+		background: #b59f3b;
 	}
 
 	@keyframes bang {

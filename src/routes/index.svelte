@@ -1,101 +1,35 @@
-<script>
-	import { browser } from '$app/env';
-	import { setWord, Word } from '../stores/gamestore';
+<script context="module">
+	import { currentWord } from '../routes/api/word';
+	import { Base64 } from '../utils/Base64.js';
+	import { GameState, GameStore } from '../stores/gamestore.js';
 
-	if (browser) {
+	export const load = async (_) => {
+		const setWord = () => {
+			const wordData = JSON.parse(Base64.decode(Base64.decode(currentWord)));
+			GameStore.set({
+				state: GameState.IN_PROGRESS,
+				date: Date.now(),
+				word: wordData,
+				guesses: Array(wordData.guessCount)
+					.fill(null)
+					.map((_) => ({
+						guess: '',
+						segments: []
+					})),
+				guessIndex: 0
+			});
+		};
+
 		setWord();
-	}
 
-	import CharachterInput from '../components/CharachterInput.svelte';
-
-	let wordChars = $Word.value.split('').map((char, id) => ({
-		id,
-		char
-	}));
-	let guessIndex = 0;
-	let finsihed = false;
-	let hasGuessedWrong = false;
-
-	let allowedGusses = Array($Word.guessCount)
-		.fill('')
-		.map((_) => ({
-			guess: '',
-			segments: []
-		}));
-
-	$: {
-		wordChars = $Word.value.split('').map((char, id) => ({
-			id,
-			char
-		}));
-		guessIndex = 0;
-		finsihed = false;
-		hasGuessedWrong = false;
-
-		allowedGusses = Array($Word.guessCount)
-			.fill('')
-			.map((_) => ({
-				guess: '',
-				segments: []
-			}));
-	}
-
-	const handleKeydown = async ({ key }) => {
-		let currentGuess = allowedGusses[guessIndex];
-		const isGuessFilled = currentGuess.guess.length === $Word.value.length;
-
-		if (key === 'Enter') {
-			if (isGuessFilled) {
-				const hasMoreGuess = guessIndex < allowedGusses.length - 1;
-				const response = await fetch(`/api/word/${currentGuess.guess}`);
-				const data = await response.json();
-
-				if (data?.count) {
-					if ($Word.value === currentGuess.guess || !hasMoreGuess) {
-						finsihed = true;
-					} else if (hasMoreGuess) {
-						hasGuessedWrong = true;
-
-						setTimeout(() => {
-							hasGuessedWrong = false;
-							guessIndex += 1;
-							currentGuess = {
-								guess: '',
-								segments: []
-							};
-						}, 250);
-					}
-				} else {
-					hasGuessedWrong = true;
-
-					setTimeout(() => {
-						hasGuessedWrong = false;
-					}, 250);
-				}
-			}
-		}
-
-		if (!isGuessFilled && isValidInput(key)) {
-			currentGuess.guess = currentGuess.guess + key;
-			currentGuess.segments = currentGuess.guess.split('');
-		}
-
-		if (key === 'Backspace') {
-			currentGuess.guess = currentGuess.guess.slice(0, -1);
-			currentGuess.segments = currentGuess.guess.split('');
-		}
-
-		allowedGusses[guessIndex] = currentGuess;
-	};
-
-	const isValidInput = (input) => {
-		const letters = /^[A-Za-z]$/;
-		const persianLetters = /^[\u0600-\u06FF]$/;
-		return input.match(persianLetters);
+		return {};
 	};
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
+<script>
+	import CharacterInput from '../components/CharacterInput.svelte';
+	import Board from '../components/Board.svelte';
+</script>
 
 <svelte:head>
 	<title>Kalamchi | کلمچی</title>
@@ -107,31 +41,81 @@
 </svelte:head>
 
 <main>
-	<div class="board" style="grid-template-columns: repeat({$Word.value.length}, 60px);">
-		{#each allowedGusses as ag, index}
-			<div class="row" class:shake={index === guessIndex && hasGuessedWrong}>
-				{#each wordChars as w, charIndex (w.id)}
-					<CharachterInput
-						bind:char={ag.segments[w.id]}
-						index={charIndex}
-						guess={ag.guess}
-						shouldBe={$Word.value[charIndex]}
-						disabled={index < guessIndex || finsihed}
-					/>
-				{/each}
-			</div>
-		{/each}
-	</div>
+	<header>
+		<div class="title">
+			<h2>کلمچی</h2>
+		</div>
+	</header>
+	<Board />
+	<div class="separator" />
+	<article>
+		<p>
+			<a href="https://kalamchi.site">کلمچی</a>
+			یک <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> فارسی دیگه!
+			<br />
+			اینجا نمیدونم چرا کیبورد میزارن. خودش معلومه دیگه. ‌‌ 🤷‍♂️
+			<br />
+			به قند پارسی تایپ کن تهش Enter بزن.
+		</p>
+	</article>
+	<div class="separator" />
+	<article>
+		<p>قوانینش: <br /> اینم خودتون بلدین ولی به هر حال</p>
+		<ul>
+			<li>
+				<CharacterInput sample state="contains" char="ش" disabled />
+				یعنی تو کلمه «ش» هست ولی جاش اشتباهه!
+			</li>
+			<li>
+				<CharacterInput sample state="correct" char="ل" disabled />
+				یعنی دقیقا همینجای کلمه «ل» داره!
+			</li>
+			<li>
+				<CharacterInput sample char="ه" disabled />
+				<CharacterInput sample char="م" disabled />
+				<CharacterInput sample char="د" disabled />
+				<CharacterInput sample char="ر" state="correct" disabled />
+				<br />
+				یعنی نه «ه» داره، نه «میم» داره، نه «دال» داره... یدونه «ر» داره!
+			</li>
+		</ul>
+	</article>
+	<div class="separator" />
+	<article>
+		<div class="links">
+			<a href="https://masood.dev" target="_blank">من</a>،
+			<span> جا لینک گیتهابی. </span>
+		</div>
+	</article>
 </main>
 
 <style>
+	header {
+		border-bottom: 0.5px solid #3a3a3c;
+		display: flex;
+		flex: 1;
+		width: 100%;
+		margin: 0 0 0px;
+		justify-content: space-around;
+	}
+
+	header .title {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	header .title h2 {
+		font-size: 26px;
+		margin: 8px 0;
+	}
+
 	main {
 		direction: rtl;
 		box-sizing: border-box;
 		text-align: center;
-		padding: 1em;
 		width: 100%;
-		max-width: 500px;
+		max-width: 480px;
 		margin: 0 auto;
 		display: flex;
 		flex-direction: column;
@@ -139,31 +123,35 @@
 		justify-content: center;
 	}
 
-	.row {
+	@media screen and (max-width: 480px) {
+		main {
+			max-width: 320px;
+		}
+	}
+
+	main > * {
+		box-sizing: border-box;
+		width: 100%;
+		user-select: none;
+	}
+
+	.separator {
+		border-bottom: 0.5px solid #3a3a3c;
 		display: flex;
-		gap: 8px;
 		margin: 8px 0;
 	}
 
-	.shake {
-		animation: shake 0.25s;
+	article {
+		text-align: right;
+		padding: 0 8px;
 	}
 
-	@keyframes shake {
-		0% {
-			transform: translateX(-4px);
-		}
-		30% {
-			transform: translateX(4px);
-		}
-		50% {
-			transform: translateX(-4px);
-		}
-		70% {
-			transform: translateX(4px);
-		}
-		100% {
-			transform: translateX(0px);
-		}
+	ul li {
+		padding: 4px 0;
+	}
+
+	.links {
+		display: flex;
+		gap: 4px;
 	}
 </style>
