@@ -9,8 +9,10 @@
 
 	let jsConfetti = null;
 	let notyf = null;
+	let hiddenInput = null;
 
 	if (browser) {
+		hiddenInput = document.getElementById('hidden-input');
 		jsConfetti = new JSConfetti();
 		notyf = new Notyf({
 			duration: 800,
@@ -69,6 +71,7 @@
 				try {
 					if (isGuessFilled) {
 						if ($GameStore.word.value === currentGuess.guess) {
+							hiddenInput && hiddenInput.blur();
 							jsConfetti.addConfetti();
 							$GameStore.state = GameState.FINISHED;
 							processing = false;
@@ -127,6 +130,10 @@
 		const persianLetters = /^[\u0600-\u06FF]$/;
 		return input.match(persianLetters);
 	};
+
+	const openVirtualKeyboard = () => {
+		!isFinished && hiddenInput && hiddenInput.focus();
+	};
 </script>
 
 <svelte:window on:keydown={handleKeydown} />
@@ -141,11 +148,7 @@
 			</div>
 			<div class="row" class:shake={index === guessIndex && hasGuessedWrong}>
 				{#each wordChars as w, charIndex (w.id)}
-					<span
-						on:click={() => {
-							document.getElementById('hidden-input').focus();
-						}}
-					>
+					<span on:click={openVirtualKeyboard}>
 						<CharacterInput
 							bind:char={ag.segments[w.id]}
 							index={charIndex}
@@ -187,7 +190,8 @@
 		border-radius: 100%;
 		visibility: hidden;
 		display: flex;
-		font-size: 32px;
+		padding-top: 7px;
+		font-size: 24px;
 		align-items: center;
 	}
 

@@ -40,7 +40,7 @@
 	/>
 </svelte:head>
 
-<input type="hidden">
+<input type="hidden" />
 
 <main>
 	<header>
@@ -48,21 +48,26 @@
 			<h2>کلمچی</h2>
 		</div>
 	</header>
-	<Board on:click={() => {console.log('clicked')}}/>
-	<div class="separator"></div>
+	<Board
+		on:click={() => {
+			console.log('clicked');
+		}}
+	/>
+	<div class="separator" />
 	<article>
-		<p>
+		<p>🥦 ‌
 			<a href="https://kalamchi.site">کلمچی</a>
 			یک <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> فارسی دیگه!
-			<br />
-			اینجا نمیدونم چرا کیبورد میزارن. خودش معلومه دیگه. ‌‌ 🤷‍♂️
-			<br />
+			<br />🎮 ‌
 			به قند پارسی تایپ کن تهش Enter بزن.
+			<br />⏰‌ ‌
+			هر ۸ ساعت یک کلمه جدید فعال میشه!
 		</p>
 	</article>
-	<div class="separator"></div>
+	<div class="separator" />
 	<article>
-		<p>قوانینش: <br /> اینم خودتون بلدین ولی به هر حال</p>
+		<p>🎲 ‌
+			قوانینش: </p>
 		<ul>
 			<li>
 				<CharacterInput sample state="contains" char="ش" disabled />
@@ -109,7 +114,7 @@
 
 	header .title h2 {
 		font-size: 26px;
-		margin: 8px 0;
+		margin: 16px 0;
 	}
 
 	main {
@@ -127,7 +132,11 @@
 
 	@media screen and (max-width: 480px) {
 		main {
-			max-width: 320px;
+			max-width: 360px;
+		}
+
+		ul {
+			padding: 0 24px 0 !important;
 		}
 	}
 
