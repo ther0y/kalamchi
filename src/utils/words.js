@@ -12,7 +12,19 @@ export const Words = {
         guessCount: 6
     },
     "22/01/24-16:00": {
-        value: "زمانه",
+        value: "شربت",
+        guessCount: 6
+    },
+    "22/01/25-00:00": {
+        value: "نسترن",
+        guessCount: 6
+    },
+    "22/01/25-08:00": {
+        value: "پلیور",
+        guessCount: 6
+    },
+    "22/01/25-16:00": {
+        value: "صنعت",
         guessCount: 6
     },
 }
