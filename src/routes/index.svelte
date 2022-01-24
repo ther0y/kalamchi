@@ -56,7 +56,7 @@
 	<div class="separator" />
 	<article>
 		<p>
-			🥦 ‌ <a href="https://kalamchi.site">کلمچی</a>
+			🥦 ‌ <a href="https://www.vajehyab.com/dehkhoda/%DA%A9%D9%84%D9%85%DA%86%DB%8C">کلمچی</a>
 			یک <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> فارسی دیگه!
 			<br />🎮‌ ‌ به قند پارسی تایپ کن تهش Enter بزن.
 			<br />⏰‌ ‌  هر ۸ ساعت یک کلمه جدید فعال میشه!
