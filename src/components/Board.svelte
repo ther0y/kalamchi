@@ -19,7 +19,7 @@
 			ripple: false,
 			position: {
 				x: 'center',
-				y: 'top'
+				y: 'center'
 			},
 			types: [
 				{

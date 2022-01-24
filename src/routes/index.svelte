@@ -55,19 +55,16 @@
 	/>
 	<div class="separator" />
 	<article>
-		<p>🥦 ‌
-			<a href="https://kalamchi.site">کلمچی</a>
+		<p>
+			🥦 ‌ <a href="https://kalamchi.site">کلمچی</a>
 			یک <a href="https://www.powerlanguage.co.uk/wordle/">Wordle</a> فارسی دیگه!
-			<br />🎮 ‌
-			به قند پارسی تایپ کن تهش Enter بزن.
-			<br />⏰‌ ‌
-			هر ۸ ساعت یک کلمه جدید فعال میشه!
+			<br />🎮‌ ‌ به قند پارسی تایپ کن تهش Enter بزن.
+			<br />⏰‌ ‌  هر ۸ ساعت یک کلمه جدید فعال میشه!
 		</p>
 	</article>
 	<div class="separator" />
 	<article>
-		<p>🎲 ‌
-			قوانینش: </p>
+		<p>🎲 ‌ قوانینش:</p>
 		<ul>
 			<li>
 				<CharacterInput sample state="contains" char="ش" disabled />
@@ -79,18 +76,14 @@
 			</li>
 			<li>
 				<CharacterInput sample char="ه" disabled />
-				<CharacterInput sample char="م" disabled />
-				<CharacterInput sample char="د" disabled />
-				<CharacterInput sample char="ر" state="correct" disabled />
-				<br />
-				یعنی نه «ه» داره، نه «میم» داره، نه «دال» داره... یدونه «ر» داره!
+				یعنی «ه» نداره!
 			</li>
 		</ul>
 	</article>
 	<div class="separator" />
 	<article>
 		<div class="links">
-			<a href="https://masood.dev" target="_blank">من</a>،
+			<a href="https://masood.dev" target="_blank">مسعود</a>،
 			<span> جا لینک گیتهابی. </span>
 		</div>
 	</article>
@@ -137,6 +130,17 @@
 
 		ul {
 			padding: 0 24px 0 !important;
+			padding-left: 0 !important;
+		}
+
+		article {
+			padding-left: 0 !important;
+		}
+	}
+
+	@media screen and (max-width: 360px) {
+		main {
+			max-width: 320px;
 		}
 	}
 
@@ -164,5 +168,6 @@
 	.links {
 		display: flex;
 		gap: 4px;
+		padding-bottom: 40px;
 	}
 </style>
