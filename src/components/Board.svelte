@@ -2,10 +2,10 @@
 	import JSConfetti from 'js-confetti';
 	import { Notyf } from 'notyf';
 	import 'notyf/notyf.min.css'; // for React, Vue and Svelte
-	import {GameState, GameStore} from '../stores/gamestore.js';
+	import { GameState, GameStore } from '../stores/gamestore.js';
 	import CharacterInput from './CharacterInput.svelte';
-	import {browser} from "$app/env";
-	import Spinner from "./Spinner.svelte";
+	import { browser } from '$app/env';
+	import Spinner from './Spinner.svelte';
 
 	let jsConfetti = null;
 	let notyf = null;
@@ -16,15 +16,15 @@
 			duration: 800,
 			ripple: false,
 			position: {
-				x: "center",
-				y: "top"
+				x: 'center',
+				y: 'top'
 			},
 			types: [
 				{
-					type: "success",
+					type: 'success',
 					icon: false,
-					background: "#fff",
-					className: "success-notyf",
+					background: '#fff',
+					className: 'success-notyf'
 				}
 			],
 			dismissible: false
@@ -49,14 +49,15 @@
 	let processing = false;
 	let hasGuessedWrong = false;
 
-	const shake = () => new Promise(resolve => {
-		hasGuessedWrong = true;
+	const shake = () =>
+		new Promise((resolve) => {
+			hasGuessedWrong = true;
 
-		setTimeout(() => {
-			hasGuessedWrong = false;
-			resolve();
-		}, 250);
-	})
+			setTimeout(() => {
+				hasGuessedWrong = false;
+				resolve();
+			}, 250);
+		});
 
 	const handleKeydown = async ({ key }) => {
 		if (!isFinished) {
@@ -115,10 +116,10 @@
 			$GameStore = {
 				...$GameStore,
 				guesses: $GameStore.guesses.map((g, index) => {
-					if(index === guessIndex) return currentGuess;
+					if (index === guessIndex) return currentGuess;
 					return g;
 				})
-			}
+			};
 		}
 	};
 
@@ -130,6 +131,7 @@
 
 <svelte:window on:keydown={handleKeydown} />
 
+<input type="text" id="hidden-input" style="opacity: 0" />
 <div class="board" style="grid-template-columns: repeat({gridColumnsCount}, 60px);">
 	{#each $GameStore.guesses as ag, index}
 		<div class="row-wrapper">
@@ -139,16 +141,22 @@
 			</div>
 			<div class="row" class:shake={index === guessIndex && hasGuessedWrong}>
 				{#each wordChars as w, charIndex (w.id)}
-					<CharacterInput
-						bind:char={ag.segments[w.id]}
-						index={charIndex}
-						guess={ag.guess}
-						shouldBe={word.value[charIndex]}
-						disabled={index < guessIndex || isFinished}
-					/>
+					<span
+						on:click={() => {
+							document.getElementById('hidden-input').focus();
+						}}
+					>
+						<CharacterInput
+							bind:char={ag.segments[w.id]}
+							index={charIndex}
+							guess={ag.guess}
+							shouldBe={word.value[charIndex]}
+							disabled={index < guessIndex || isFinished}
+						/>
+					</span>
 				{/each}
 			</div>
-			<Spinner show={isLoading && index === guessIndex}/>
+			<Spinner show={isLoading && index === guessIndex} />
 		</div>
 	{/each}
 </div>
@@ -156,6 +164,16 @@
 <style>
 	.board {
 		margin: 32px 0;
+	}
+
+	#hidden-input {
+		position: fixed;
+		opacity: 0;
+	}
+
+	span {
+		display: inline-flex;
+		margin: auto;
 	}
 
 	.row-wrapper {

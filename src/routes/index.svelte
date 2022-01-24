@@ -40,14 +40,16 @@
 	/>
 </svelte:head>
 
+<input type="hidden">
+
 <main>
 	<header>
 		<div class="title">
 			<h2>کلمچی</h2>
 		</div>
 	</header>
-	<Board />
-	<div class="separator" />
+	<Board on:click={() => {console.log('clicked')}}/>
+	<div class="separator"></div>
 	<article>
 		<p>
 			<a href="https://kalamchi.site">کلمچی</a>
@@ -58,7 +60,7 @@
 			به قند پارسی تایپ کن تهش Enter بزن.
 		</p>
 	</article>
-	<div class="separator" />
+	<div class="separator"></div>
 	<article>
 		<p>قوانینش: <br /> اینم خودتون بلدین ولی به هر حال</p>
 		<ul>
