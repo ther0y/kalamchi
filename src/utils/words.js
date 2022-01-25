@@ -27,4 +27,16 @@ export const Words = {
         value: "صنعت",
         guessCount: 6
     },
+    "22/01/26-00:00": {
+        value: "باران",
+        guessCount: 6
+    },
+    "22/01/26-08:00": {
+        value: "گلدان",
+        guessCount: 6
+    },
+    "22/01/26-16:00": {
+        value: "خزنده",
+        guessCount: 6
+    },
 }
