@@ -12,7 +12,7 @@ const formatedNow = format(now, `yy/MM/dd-${hour > 10 ? hour : '0' + hour}:00`);
 
 export const currentWord = Base64.encode(Base64.encode(JSON.stringify(Words[formatedNow])));
 
-export async function get() {
+export async function get(): Promise<{status: number, body: unknown}> {
 	return {
 		status: 200,
 		body: currentWord

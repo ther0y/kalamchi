@@ -11,6 +11,8 @@
 	let notyf = null;
 	let hiddenInput = null;
 
+	$: boardStyle = `grid-template-columns: repeat(${gridColumnsCount}, 60px);`;
+
 	if (browser) {
 		hiddenInput = document.getElementById('hidden-input');
 		jsConfetti = new JSConfetti();
@@ -37,7 +39,7 @@
 	$: word = $GameStore.word;
 	$: isFinished = $GameStore.state === GameState.FINISHED;
 	$: gridColumnsCount = $GameStore.word.value?.length;
-	let wordChars = [];
+	let wordChars;
 	$: guessIndex = $GameStore.guessIndex;
 	$: currentGuess = $GameStore.guesses[$GameStore.guessIndex];
 
@@ -72,7 +74,7 @@
 					if (isGuessFilled) {
 						if ($GameStore.word.value === currentGuess.guess) {
 							hiddenInput && hiddenInput.blur();
-							jsConfetti.addConfetti();
+							jsConfetti.addConfetti().then();
 							$GameStore.state = GameState.FINISHED;
 							processing = false;
 						} else {
@@ -139,7 +141,7 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <input type="text" id="hidden-input" style="opacity: 0" />
-<div class="board" style="grid-template-columns: repeat({gridColumnsCount}, 60px);">
+<div class="board" style={boardStyle}>
 	{#each $GameStore.guesses as ag, index}
 		<div class="row-wrapper">
 			<div class:active={index === guessIndex && !isFinished} class="indicator">

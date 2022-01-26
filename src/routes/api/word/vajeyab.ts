@@ -1,5 +1,6 @@
 import httpTransport from 'http';
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const fetchWordMeanings = (query: string) => {
 	return new Promise((resolve, reject) => {
 		const responseEncoding = 'utf8';
@@ -15,7 +16,7 @@ export const fetchWordMeanings = (query: string) => {
 
 		const request = httpTransport
 			.request(httpOptions, (res) => {
-				let responseBufs = [];
+				const responseBufs = [];
 				let responseStr = '';
 
 				res

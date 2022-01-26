@@ -1,9 +1,10 @@
-<script context="module">
-	import { currentWord } from '../routes/api/word';
+<script context="module" lang="ts">
+	import { currentWord } from './api/word';
 	import { Base64 } from '../utils/Base64.js';
 	import { GameState, GameStore } from '../stores/gamestore.js';
 
-	export const load = async (_) => {
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	export const load = async () => {
 		const setWord = () => {
 			const wordData = JSON.parse(Base64.decode(Base64.decode(currentWord)));
 			GameStore.set({
@@ -12,7 +13,7 @@
 				word: wordData,
 				guesses: Array(wordData.guessCount)
 					.fill(null)
-					.map((_) => ({
+					.map(() => ({
 						guess: '',
 						segments: []
 					})),
@@ -53,7 +54,7 @@
 			console.log('clicked');
 		}}
 	/>
-	<div class="separator" />
+	<div class="separator"></div>
 	<article>
 		<p>
 			🥦 ‌ <a href="https://www.vajehyab.com/dehkhoda/%DA%A9%D9%84%D9%85%DA%86%DB%8C">کلمچی</a>
@@ -62,9 +63,9 @@
 			<br />⏰‌ ‌  هر ۸ ساعت یک کلمه جدید فعال میشه!
 		</p>
 	</article>
-	<div class="separator" />
-	<article>
-		<p>🎲 ‌ قوانینش:</p>
+	<div class="separator"></div>
+	<section>
+		<h4>🎲 ‌ قوانین بازی:</h4>
 		<ul>
 			<li>
 				<CharacterInput sample state="contains" char="ش" disabled />
@@ -79,23 +80,23 @@
 				یعنی «ه» نداره!
 			</li>
 		</ul>
-	</article>
-	<div class="separator" />
-	<article>
+	</section>
+	<div class="separator"></div>
+	<footer>
 		<div class="links">
 			<a href="https://masood.dev" target="_blank">مسعود</a>،
 			<span> جا لینک گیتهابی. </span>
 		</div>
-	</article>
+	</footer>
 </main>
 
 <style>
 	header {
-		border-bottom: 0.5px solid #3a3a3c;
+		border-bottom: 1px solid #3a3a3c;
 		display: flex;
 		flex: 1;
 		width: 100%;
-		margin: 0 0 0px;
+		margin: 0 0 0;
 		justify-content: space-around;
 	}
 
@@ -133,7 +134,7 @@
 			padding-left: 0 !important;
 		}
 
-		article {
+		section, article, footer {
 			padding-left: 0 !important;
 		}
 	}
@@ -151,12 +152,12 @@
 	}
 
 	.separator {
-		border-bottom: 0.5px solid #3a3a3c;
+		border-bottom: 1px solid #3a3a3c;
 		display: flex;
 		margin: 8px 0;
 	}
 
-	article {
+	section, article, footer {
 		text-align: right;
 		padding: 0 8px;
 	}
