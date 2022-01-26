@@ -39,4 +39,16 @@ export const Words = {
         value: "خزنده",
         guessCount: 6
     },
+    "22/01/27-00:00": {
+        value: "سیلو",
+        guessCount: 6
+    },
+    "22/01/27-08:00": {
+        value: "نابغه",
+        guessCount: 6
+    },
+    "22/01/27-16:00": {
+        value: "پیشه",
+        guessCount: 6
+    },
 }
