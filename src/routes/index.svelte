@@ -85,7 +85,7 @@
 	<footer>
 		<div class="links">
 			<a href="https://masood.dev" target="_blank">مسعود</a>،
-			<span> جا لینک گیتهابی. </span>
+			<a href="https://github.com/ther0y/kalamchi" target="_blank">گیتهاب</a>
 		</div>
 	</footer>
 </main>
