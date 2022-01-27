@@ -2,7 +2,7 @@
   "name": "kalamchi",
   "version": "0.0.1",
   "scripts": {
-    "dev": "svelte-kit dev",
+    "dev": "env-cmd svelte-kit dev",
     "build": "svelte-kit build",
     "start": "node build",
     "package": "svelte-kit package",
@@ -18,6 +18,7 @@
     "@types/cryptojs": "^3.1.30",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
     "@typescript-eslint/parser": "^4.31.1",
+    "env-cmd": "^10.1.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-svelte3": "^3.2.1",

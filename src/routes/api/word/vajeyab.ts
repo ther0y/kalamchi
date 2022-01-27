@@ -1,4 +1,5 @@
 import httpTransport from 'http';
+import {VAJEHYAB_TOKEN} from "../../../secrets";
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const fetchWordMeanings = (query: string) => {
@@ -8,7 +9,7 @@ export const fetchWordMeanings = (query: string) => {
 		const httpOptions = {
 			hostname: 'api.vajehyab.com',
 			port: '80',
-			path: `/v3/search?token=39151.G3PD3QHkt2djK5HudIxUJjgAzZMBPK4vNT9RJQbd&q=${word}&type=exact&filter=dehkhoda,moein,amid`,
+			path: `/v3/search?token=${VAJEHYAB_TOKEN}&q=${word}&type=exact&filter=dehkhoda,moein,amid`,
 			method: 'GET',
 			headers: {}
 		};
