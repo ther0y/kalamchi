@@ -35,6 +35,7 @@ export const fetchWordMeanings = (query: string) => {
 								: responseStr;
 
 						const data = JSON.parse(responseStr);
+						console.log(data);
 						resolve({
 							error: null,
 							status: res.statusCode,
