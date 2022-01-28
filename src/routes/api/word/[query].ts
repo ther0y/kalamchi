@@ -9,8 +9,6 @@ export async function get({ params }) {
 
 		const { response, status } = (await fetchWordMeanings(params.query)) as {response: unknown, status: number};
 
-		console.log(decodeURI(params.query), response);
-
 		wordsCache[params.query] = {
 			status,
 			body: response
