@@ -1,7 +1,6 @@
 import {writable} from 'svelte/store';
 import {LsBox} from "../encryoted-localstorage";
 import {LsNames} from "../ls-names";
-import {browser} from "$app/env";
 
 export const GameState = {
 	PENDING: 'PENDING',
