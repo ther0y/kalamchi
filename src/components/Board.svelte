@@ -1,11 +1,13 @@
-<script>
+<script lang="ts">
 	import JSConfetti from 'js-confetti';
 	import { Notyf } from 'notyf';
 	import 'notyf/notyf.min.css'; // for React, Vue and Svelte
-	import {GameState, GameStore, stateBox} from '../stores/gamestore.ts';
+	import { GameState, GameStore, stateBox } from '../stores/gamestore.ts';
 	import CharacterInput from './CharacterInput.svelte';
 	import { browser } from '$app/env';
 	import Spinner from './Spinner.svelte';
+	import { resultTitle } from '../utils/result-helper';
+	import Modal from "./Modal.svelte";
 
 	let jsConfetti = null;
 	let notyf = null;
@@ -143,6 +145,9 @@
 <svelte:window on:keydown={handleKeydown} />
 
 <input type="text" id="hidden-input" style="opacity: 0" />
+
+<Modal isFinished={isFinished} />
+
 <div class="board" style={boardStyle}>
 	{#each $GameStore.guesses as ag, index}
 		<div class="row-wrapper">
