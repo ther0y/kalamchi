@@ -2,7 +2,7 @@
 	import JSConfetti from 'js-confetti';
 	import { Notyf } from 'notyf';
 	import 'notyf/notyf.min.css'; // for React, Vue and Svelte
-	import { GameState, GameStore } from '../stores/gamestore.js';
+	import {GameState, GameStore, stateBox} from '../stores/gamestore.ts';
 	import CharacterInput from './CharacterInput.svelte';
 	import { browser } from '$app/env';
 	import Spinner from './Spinner.svelte';
@@ -126,6 +126,8 @@
 				})
 			};
 		}
+
+		stateBox.set(JSON.stringify($GameStore));
 	};
 
 	const isValidInput = (input) => {

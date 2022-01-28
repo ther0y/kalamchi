@@ -1,35 +1,47 @@
 <script context="module" lang="ts">
-	import { currentWord } from './api/word';
+	import { CurrentGameId, CurrentWord } from './api/word';
 	import { Base64 } from '../utils/Base64.js';
-	import { GameState, GameStore } from '../stores/gamestore.js';
+	import {GameState} from "../stores/gamestore";
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	export const load = async () => {
-		const setWord = () => {
-			const wordData = JSON.parse(Base64.decode(Base64.decode(currentWord)));
-			GameStore.set({
-				state: GameState.IN_PROGRESS,
-				date: Date.now(),
-				word: wordData,
-				guesses: Array(wordData.guessCount)
-					.fill(null)
-					.map(() => ({
-						guess: '',
-						segments: []
-					})),
-				guessIndex: 0
-			});
+	/** @type {import('@sveltejs/kit').Load} */
+	export async function load({ url }) {
+		const wordData = JSON.parse(Base64.decode(Base64.decode(CurrentWord)));
+
+		return {
+			props: {
+				gameId: Base64.encode(CurrentGameId),
+				game: {
+					state: GameState.IN_PROGRESS,
+					date: Date.now(),
+					word: wordData,
+					guesses: Array(wordData.guessCount)
+						.fill(null)
+						.map(() => ({
+							guess: '',
+							segments: []
+						})),
+					guessIndex: 0
+				}
+			}
 		};
-
-		setWord();
-
-		return {};
-	};
+	}
 </script>
 
-<script>
+<script lang="ts">
 	import CharacterInput from '../components/CharacterInput.svelte';
 	import Board from '../components/Board.svelte';
+	import { onMount } from 'svelte';
+	import { LsNames } from '../ls-names.ts';
+	import {InitGame} from "../stores/gamestore";
+
+	export let gameId;
+	export let game;
+
+	InitGame(game);
+
+	onMount(() => {
+		localStorage.setItem(LsNames.GAME_ID, gameId);
+	});
 </script>
 
 <svelte:head>
@@ -42,25 +54,23 @@
 </svelte:head>
 
 <input type="hidden" />
-
 <main>
 	<header>
 		<div class="title">
 			<h2>کلمچی</h2>
 		</div>
 	</header>
-	<Board
-		on:click={() => {
-			console.log('clicked');
-		}}
-	/>
+	<Board/>
 	<div class="separator"></div>
 	<article>
 		<p>
-			🥦 ‌ <a href="https://www.vajehyab.com/dehkhoda/%DA%A9%D9%84%D9%85%DA%86%DB%8C" target="_blank">کلمچی</a>
+			🥦 ‌ <a
+				href="https://www.vajehyab.com/dehkhoda/%DA%A9%D9%84%D9%85%DA%86%DB%8C"
+				target="_blank">کلمچی</a
+			>
 			یک <a href="https://www.powerlanguage.co.uk/wordle/" target="_blank">Wordle</a> فارسی دیگه!
 			<br />🎮‌ ‌ به قند پارسی تایپ کن تهش Enter بزن.
-			<br />⏰‌ ‌  هر ۸ ساعت یک کلمه جدید فعال میشه!
+			<br />⏰‌ ‌ هر ۸ ساعت یک کلمه جدید فعال میشه!
 		</p>
 	</article>
 	<div class="separator"></div>
@@ -134,7 +144,9 @@
 			padding-left: 0 !important;
 		}
 
-		section, article, footer {
+		section,
+		article,
+		footer {
 			padding-left: 0 !important;
 		}
 	}
@@ -157,7 +169,9 @@
 		margin: 8px 0;
 	}
 
-	section, article, footer {
+	section,
+	article,
+	footer {
 		text-align: right;
 		padding: 0 8px;
 	}

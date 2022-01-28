@@ -8,13 +8,18 @@ const roundHour = (hour, roundBy) => {
 
 const now = Date.now();
 const hour = roundHour(getHours(now), 8);
-const formatedNow = format(now, `yy/MM/dd-${hour > 10 ? hour : '0' + hour}:00`);
 
-export const currentWord = Base64.encode(Base64.encode(JSON.stringify(Words[formatedNow])));
+export const CurrentGameId = format(now, `yy/MM/dd-${hour > 10 ? hour : '0' + hour}:00`);
+const word = Words[CurrentGameId] || {
+	value: "ایران",
+	guessCount: 6
+};
+
+export const CurrentWord = Base64.encode(Base64.encode(JSON.stringify(word)));
 
 export async function get(): Promise<{status: number, body: unknown}> {
 	return {
 		status: 200,
-		body: currentWord
+		body: CurrentWord
 	};
 }
